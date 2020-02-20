@@ -3,8 +3,6 @@ class Library:
     register_time = 0
     books_per_day = 0
     book_set = set([])
-    has_been_registered = False
-    total_score = 0
     def __init__(self, register_time, books_per_day, library_index):
         self.register_time = register_time
         self.books_per_day = books_per_day
@@ -16,11 +14,30 @@ class Library:
     def del_book(self, book_index):
         self.book_set.remove(book_index)
 
-    def calc_score(self):
-        return self.total_score / (self.register_time)
+    def del_book_set(self, book_set):
+        self.book_set = self.book_set.difference(book_set)
+
+    def subtract_register_day(self):
+        self.register_time = self.register_time - 1
+
+    def calc_score(self, book_score_list):
+        score_calculated = 0
+        for book in self.book_set:
+            try:
+                score_calculated = score_calculated + book_score_list[book]
+            except:
+                print("Problem calculating score for library " + str(self.library_index + "\n"))
+        return float(score_calculated) / (self.register_time + len(self.book_set))
+
+    def a_string(self):
+        return "{Indice: " + str(self.library_index) + ", Set de libros: " + str(self.book_set) + "}"
 
     def __str__(self):
-        return str(self.library_index) + " , " + str(self.book_set)
+        representation = self.a_string()
+        return representation
+    def __repr__(self):
+        representation = self.a_string()
+        return representation
 
     
 def read_file(file_name):
