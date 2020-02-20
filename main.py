@@ -3,7 +3,7 @@ import read_file
 days = 10
 resultLibrerias = []
 
-numDays, librerias, score = read_file.read_file('a_example.txt')
+numDays, librerias, score = read_file.read_file('e_so_many_books.txt')
 
 while numDays > 0:
     #select MAx beneficio
@@ -23,20 +23,21 @@ while numDays > 0:
     
     sets = []
 
-    print(libSect.book_set)
+    #print(libSect.book_set)
 
     for book in libSect.book_set:
         sets.append([book, score[book]])
 
     numDays -= libSect.register_time
     t = sorted(sets, key=lambda sets: sets[1], reverse=True)[0:libSect.books_per_day*(numDays)]
-    libSect.book_set = set([b[0] for b in t])
-    [l.del_book_set(libSect.book_set) for l in librerias ]
-    resultLibrerias += [libSect]
+    if len(t) > 0:
+        libSect.book_set = set([b[0] for b in t])
+        [l.del_book_set(libSect.book_set) for l in librerias ]
+        resultLibrerias += [libSect]
 
 
 
-F = open("result.txt", "w")
+F = open("result_e.txt", "w")
 F.write(str(len(resultLibrerias)) + "\n")
 
 for l in resultLibrerias:
