@@ -13,8 +13,12 @@ class Library:
     def put_book_set(self, book_set):
         self.book_set = book_set
 
+    def del_book(self, book_index):
+        self.book_set.remove(book_index)
+
     def calc_score(self):
         return self.total_score / (self.register_time)
+
     def __str__(self):
         return str(self.library_index) + " , " + str(self.book_set)
 
@@ -69,6 +73,8 @@ def read_file(file_name):
                     library_book_set = set([])
                     for book_index in data:
                         library_book_set.add(int(book_index))
+                    libraries[library_index].put_book_set(library_book_set)
+                    library_index = library_index + 1
                 except:
                     print("Problem reading books for library " + str(library_index) + "\n")
                     print(data)
