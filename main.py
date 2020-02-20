@@ -5,9 +5,7 @@ resultLibrerias = []
 
 numDays, librerias, score = read_file.read_file('a_example.txt')
 
-print(librerias)
 while numDays > 0:
-    print(numDays)
     #select MAx beneficio
     if len(librerias) == 0:
         break
@@ -22,10 +20,20 @@ while numDays > 0:
     libSect = librerias[index]
     del librerias[index]
     #todo Eliminar mejores que de tiempo
+    
+    sets = []
+
+    print(libSect.book_set)
+
+    for book in libSect.book_set:
+        sets.append([book, score[book]])
+
+    numDays -= libSect.register_time
+    t = sorted(sets, key=lambda sets: sets[1], reverse=True)[0:libSect.books_per_day*(numDays)]
+    libSect.book_set = set([b[0] for b in t])
     [l.del_book_set(libSect.book_set) for l in librerias ]
     resultLibrerias += [libSect]
 
-    numDays -= libSect.register_time
 
 
 F = open("result.txt", "w")
