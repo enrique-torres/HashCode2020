@@ -1,32 +1,76 @@
 class Library:
+    library_index = 0
     register_time = 0
     books_per_day = 0
     book_set = set([])
     has_been_registered = False
     total_score = 0
-    def __init__(self, register_time, books_per_day, book_set):
+    def __init__(self, register_time, books_per_day, library_index):
         self.register_time = register_time
-        self.book_set = book_set
         self.books_per_day = books_per_day
+        self.library_index = library_index
 
-    def calc_score():
-        return self.total_score / ()
+    def put_book_set(self, book_set):
+        self.book_set = book_set
+
+    def calc_score(self):
+        return self.total_score / (self.register_time)
+    def __str__(self):
+        return str(self.library_index) + " , " + str(self.book_set)
 
     
+def read_file(file_name):
+    file_in = open(file_name)
+    lines = file_in.readlines()
 
+    num_books = 0
+    num_libraries = 0
+    num_max_days = 0
 
-file_in = open('b_read_on.txt')
-lines = file_in.readlines()
+    libraries = []
+    scores = []
 
-num_books = 0
-num_libraries = 0
-num_max_days = 0
-
-libraries = []
-scores = []
-
-index = 0
-for line in lines:
-    if index == 0:
-        data = line.split()
-        
+    index = 0
+    library_index = 0
+    for line in lines:
+        #First line of file, general information about input data
+        if index == 0:
+            data = line.split()
+            try:
+                num_books = int(data[0])
+                num_libraries = int(data[1])
+                num_max_days = int(data[2])
+            except:
+                print("Error in first line of input file:\n")
+                print(data)
+        #Second line of file, book score in order
+        elif index == 1:
+            data = line.split()
+            try:
+                for book_score in data:
+                    scores.append(int(book_score))
+            except Exception as e:
+                print("Error in second line of input file:\n")
+                print(data)
+                print(e)
+        #Rest of lines of input data
+        else:
+            #This line is a library general information line
+            if index % 2 == 0:
+                data = line.split()
+                try:
+                    libraries.append(Library(int(data[1]), int(data[2]), library_index))
+                except:
+                    print("Problem reading library number " + str(library_index) + "\n")
+                    print(data)
+            if index % 2 == 1:
+                data = line.split()
+                try:
+                    library_book_set = set([])
+                    for book_index in data:
+                        library_book_set.add(int(book_index))
+                except:
+                    print("Problem reading books for library " + str(library_index) + "\n")
+                    print(data)
+        index = index + 1
+    return num_max_days, libraries, scores
